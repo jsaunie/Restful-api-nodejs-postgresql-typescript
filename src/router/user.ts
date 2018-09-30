@@ -5,6 +5,7 @@ import UserController from '../http/controller/UserController';
 class UserRoute {
 
     public readonly router: express.Router;
+    public readonly prefix: string = '/user';
 
     constructor() {
         this.router = express.Router();
@@ -51,4 +52,4 @@ class UserRoute {
 
 }
 
-export default new UserRoute().router;
+export default new UserRoute();

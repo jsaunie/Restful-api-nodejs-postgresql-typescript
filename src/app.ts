@@ -1,5 +1,5 @@
-import express from "express";
-import bodyParser from "body-parser";
+import express from 'express';
+import bodyParser from 'body-parser';
 import UserRoute from './router/user';
 
 class App {
@@ -9,7 +9,7 @@ class App {
     constructor() {
         this.app = express();
         this.config()
-            .routes();
+            .routerModules();
     }
 
     /**
@@ -18,7 +18,7 @@ class App {
      */
     private config(): App {
         this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({extended: false}));
+        this.app.use(bodyParser.urlencoded({ extended: false }));
         return this;
     }
 
@@ -26,8 +26,8 @@ class App {
      * Define all router modules
      * @return App
      */
-    private routes(): App {
-        this.app.use('/user', UserRoute);
+    private routerModules(): App {
+        this.app.use(UserRoute.prefix, UserRoute.router);
 
         return this;
     }
