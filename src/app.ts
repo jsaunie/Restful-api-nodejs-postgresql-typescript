@@ -1,7 +1,10 @@
-import express, {Request, Response} from "express";
+import express from "express";
 import bodyParser from "body-parser";
+import UserRoute from './router/user';
 
 class App {
+
+    public app: express.Application;
 
     constructor() {
         this.app = express();
@@ -9,34 +12,22 @@ class App {
             .routes();
     }
 
-    public app: express.Application;
-
+    /**
+     * Config the application
+     * @return App
+     */
     private config(): App {
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended: false}));
         return this;
     }
 
+    /**
+     * Define all router modules
+     * @return App
+     */
     private routes(): App {
-        const router = express.Router();
-
-        router.get('/', (req: Request, res: Response) => {
-            res.status(200).send({
-                message: 'Hello World!'
-            })
-        });
-
-        router.get('/user', function (req: Request, res: Response) {
-            res.send('Hi user');
-        });
-
-        router.post('/user', (req: Request, res: Response) => {
-            const data = req.body;
-            // query a database and save data
-            res.status(200).send(data);
-        });
-
-        this.app.use('/', router);
+        this.app.use('/user', UserRoute);
 
         return this;
     }
