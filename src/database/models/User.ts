@@ -1,7 +1,7 @@
 import {STRING} from 'sequelize';
 import Database from '../Database';
 
-export const UserModel = Database.define(
+const UserModel = Database.define(
     'user',
     {
         firstName: {
@@ -13,6 +13,7 @@ export const UserModel = Database.define(
     },
     {}
 );
+
 UserModel.sync({force: true}).then(() => {
     // Table created
     return UserModel.create({
@@ -20,4 +21,5 @@ UserModel.sync({force: true}).then(() => {
         lastName: 'Doe'
     });
 });
+
 export default UserModel;
