@@ -24,7 +24,7 @@ export default class UserMiddleware {
      * @return void
      */
     public static isAllowed(req: Request, res: Response, next: NextFunction): void {
-        console.log('is Allowed :', req.params.id);
+        console.log('is Allowed :');
         next();
     }
 

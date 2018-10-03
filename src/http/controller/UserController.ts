@@ -27,9 +27,7 @@ export default class UserController {
      * @return void
      */
     public static show(req: Request, res: Response): void {
-        res.status(200).send({
-            id: req.params.id
-        });
+        User.findById(req.params.id).then((user) => res.status(200).send(user));
     }
 
     /**
@@ -60,9 +58,20 @@ export default class UserController {
      */
     public static update(req: Request, res: Response): void {
         const data = req.body;
-        res.status(200).send({
-            message: `User ${req.params.id} was successfully updated !`,
-            data,
+        User.findById(req.params.id).then((user) => {
+            if (user == null) {
+                return res.status(200).send({
+                    message: `User ${req.params.id} was not found !`,
+                    data
+                });
+            }
+            return user.update(data).then(() => {
+                res.status(200).send({
+                    message: `User ${req.params.id} was successfully updated !`,
+                    user,
+                    data
+                });
+            });
         });
     }
 
@@ -75,8 +84,17 @@ export default class UserController {
      * @return void
      */
     public static delete(req: Request, res: Response): void {
-        res.status(200).send({
-            message: `User ${req.params.id} was successfully deleted !`
+        User.findById(req.params.id).then((user) => {
+            if (user == null) {
+                return res.status(200).send({
+                    message: `User ${req.params.id} was not found !`,
+                });
+            }
+            return user.destroy().then(() => {
+                res.status(200).send({
+                    message: `User ${req.params.id} was successfully deleted !`
+                })
+            });
         })
     }
 
