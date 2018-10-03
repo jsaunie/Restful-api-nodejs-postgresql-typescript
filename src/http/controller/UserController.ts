@@ -1,9 +1,11 @@
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
+import User from "../../database/models/User";
 
 export default class UserController {
 
     /**
      * Show all users
+     * @method GET
      * @param {Request} req
      * @param {Response} res
      * @return void
@@ -16,6 +18,7 @@ export default class UserController {
 
     /**
      * Show user according by hid id and the id parameter
+     * @method GET
      * @param {Request} req
      * @param {Response} res
      * @return void
@@ -28,20 +31,32 @@ export default class UserController {
 
     /**
      * Save a new user
+     * @method POST
      * @param {Request} req
      * @param {Response} res
      * @return void
      */
     public static add(req: Request, res: Response): void {
         const data = req.body;
+        // force: true will drop the table if it already exists
+        User.sync({force: true}).then(() => {
+            // Table created
+            return User.create(data);
+        });
+        const users = User.findAll().then(users => {
+            console.log('users :', users);
+            return users;
+        });
         res.status(200).send({
             message: `User was successfully added !`,
             data,
+            users,
         });
     }
 
     /**
      * Update user
+     * @method PUT
      * @param {Request} req
      * @param {Response} res
      * @return void
@@ -57,6 +72,7 @@ export default class UserController {
 
     /**
      * Delete user
+     * @method DELETE
      * @param {Request} req
      * @param {Response} res
      * @return void
