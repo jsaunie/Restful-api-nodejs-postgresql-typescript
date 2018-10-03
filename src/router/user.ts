@@ -16,16 +16,16 @@ class UserRoute {
 
     /**
      * Define all path of your router
-     * @return router
+     * @return UserRoute
      */
-    private routes(): express.Router {
+    private routes(): UserRoute {
         this.router.get('/', UserController.index);
         this.router.post('/', UserController.add);
         this.router.get('/:id', UserController.show);
-        this.router.post('/:id', UserMiddleware.isAllowed, UserController.update);
+        this.router.put('/:id', UserMiddleware.isAllowed, UserController.update);
         this.router.delete('/:id/delete', UserController.delete);
 
-        return this.router;
+        return this;
     }
 
     /**
