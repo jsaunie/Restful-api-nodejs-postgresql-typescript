@@ -1,7 +1,8 @@
-require('dotenv').config({path: '../.env'});
 import Server from './server';
+import dotEnv from 'dotenv';
 
-console.log('node env :', __dirname, process.env.NODE_ENV);
+// Config environment variable
+dotEnv.config();
 
 // Start server and set the port listened
 new Server(5000).start();

@@ -13,14 +13,11 @@ export const UserModel = Database.define(
     },
     {}
 );
-
+UserModel.sync({force: true}).then(() => {
+    // Table created
+    return UserModel.create({
+        firstName: 'John',
+        lastName: 'Doe'
+    });
+});
 export default UserModel;
-
-// // force: true will drop the table if it already exists
-// User.sync({force: true}).then(() => {
-//     // Table created
-//     return User.create({
-//         firstName: 'John',
-//         lastName: 'Hancock'
-//     });
-// });

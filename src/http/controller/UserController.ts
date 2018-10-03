@@ -11,9 +11,12 @@ export default class UserController {
      * @return void
      */
     public static index(req: Request, res: Response): void {
-        res.status(200).send({
-            message: 'Hello user!'
-        })
+        User.findAll().then(users => {
+            res.status(200).send({
+                message: `All user`,
+                users,
+            });
+        });
     }
 
     /**
@@ -38,19 +41,13 @@ export default class UserController {
      */
     public static add(req: Request, res: Response): void {
         const data = req.body;
-        // force: true will drop the table if it already exists
-        User.sync({force: true}).then(() => {
-            // Table created
-            return User.create(data);
-        });
-        const users = User.findAll().then(users => {
-            console.log('users :', users);
-            return users;
-        });
-        res.status(200).send({
-            message: `User was successfully added !`,
-            data,
-            users,
+
+        // Create User
+        User.create(data).then(() => {
+            res.status(200).send({
+                message: `User was successfully added !`,
+                data,
+            });
         });
     }
 

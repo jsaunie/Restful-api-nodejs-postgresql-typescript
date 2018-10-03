@@ -1,12 +1,12 @@
 import {ISequelizeDatabase} from "../types/config/database";
 
 const database: ISequelizeDatabase = {
-    name: process.env.DB_NAME,
-    username: 'postgres',
-    password: 'root',
+    name: process.env.DB_NAME || 'postgres',
+    username: process.env.DB_USER || 'postgres',
+    password: process.env.DB_PASSWORD || 'root',
     options: {
-        host: 'localhost',
-        dialect: 'postgres',
+        host: process.env.DB_HOST || 'localhost',
+        dialect: process.env.DB_HOST || 'postgres',
         operatorsAliases: false,
         pool: {
             max: 5,

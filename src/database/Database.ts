@@ -6,31 +6,29 @@ class Database {
     public sequelize: Sequelize.Sequelize;
 
     constructor() {
-        this.setUpTheConnection()
-            .testConnection();
+        this.sequelize = this.setUpTheConnection();
+
+        this.testConnection();
     }
 
     /**
      * Setting up the connection to postgres
-     * @returns {Database}
+     * @returns {Sequelize.Sequelize}
      */
-    private setUpTheConnection(): Database {
-        console.log('db name :', database.name);
-        this.sequelize = new Sequelize(
+    private setUpTheConnection(): Sequelize.Sequelize {
+        return new Sequelize(
             database.name,
             database.username,
             database.password,
             database.options,
         );
 
-        return this;
     }
 
     /**
-     * Test the connection to postgre
-     * @returns {Database}
+     * Test the connection to postgres
      */
-    private testConnection(): Database {
+    private testConnection() {
         this.sequelize.authenticate()
             .then(() => {
                 console.log('Connection has been established successfully.');
@@ -38,8 +36,6 @@ class Database {
             .catch(err => {
                 console.error('Unable to connect to the database:', err);
             });
-
-        return this;
     }
 }
 
