@@ -1,4 +1,4 @@
-import {Router, RequestHandler} from 'express';
+import {RequestHandler, Router} from 'express';
 import UserMiddleware from '../http/middleware/UserMiddleware';
 import UserController from '../http/controller/UserController';
 import {IRoute, ISubMiddleware} from "../types/router";
@@ -6,21 +6,17 @@ import {IRoute, ISubMiddleware} from "../types/router";
 class UserRoute implements IRoute<UserRoute> {
 
     public readonly router: Router;
+
     public readonly prefix: string = '/user';
+
     private static middleware: RequestHandler[] = [
         UserMiddleware.isAuthenticated,
         UserMiddleware.isAllowed,
     ];
+
     private static subMiddleware = [
         {path: '/:id', middleware: UserMiddleware.isAllowed},
     ];
-
-    constructor() {
-        this.router = Router();
-        this.setGlobalMiddleware(UserRoute.middleware)
-            .setSubStackMiddleware(UserRoute.subMiddleware)
-            .routes();
-    }
 
     /**
      * Define all path of your router
@@ -34,6 +30,13 @@ class UserRoute implements IRoute<UserRoute> {
         this.router.delete('/:id', UserController.delete);
 
         return this;
+    }
+
+    constructor() {
+        this.router = Router();
+        this.setGlobalMiddleware(UserRoute.middleware)
+            .setSubStackMiddleware(UserRoute.subMiddleware)
+            .routes();
     }
 
     /**
