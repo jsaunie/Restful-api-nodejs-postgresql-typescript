@@ -1,6 +1,6 @@
 import express from 'express';
-import bodyParser from 'body-parser';
-import UserRoute from './router/UserRouter';
+import {Middleware} from "./http/middleware/Middleware";
+import {Router} from "./router/Router";
 
 class App {
 
@@ -8,30 +8,10 @@ class App {
 
     constructor() {
         this.app = express();
-        this.config()
-            .routerModules();
+        new Middleware(this.app);
+        new Router(this.app);
     }
 
-    /**
-     * Config the application
-     * @return App
-     */
-    private config(): App {
-        this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({ extended: false }));
-
-        return this;
-    }
-
-    /**
-     * Define all router modules
-     * @return App
-     */
-    private routerModules(): App {
-        this.app.use(UserRoute.prefix, UserRoute.router);
-
-        return this;
-    }
 }
 
 export default new App().app;
