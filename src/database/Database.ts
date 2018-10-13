@@ -6,7 +6,7 @@ class Database {
     public sequelize: Sequelize.Sequelize;
 
     constructor() {
-        this.sequelize = this.setUpTheConnection();
+        this.sequelize = Database.setUpTheConnection();
 
         this.testConnection();
     }
@@ -15,7 +15,7 @@ class Database {
      * Setting up the connection to postgres
      * @returns {Sequelize.Sequelize}
      */
-    private setUpTheConnection(): Sequelize.Sequelize {
+    private static setUpTheConnection(): Sequelize.Sequelize {
         return new Sequelize(
             database.name,
             database.username,

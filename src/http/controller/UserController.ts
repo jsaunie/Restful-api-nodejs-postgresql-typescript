@@ -27,7 +27,7 @@ export default class UserController {
      * @return void
      */
     public static show(req: Request, res: Response): void {
-        User.findById(req.params.id).then((user) => res.status(200).send(user));
+        User.findById(req.params.id).then(user => res.status(200).send(user));
     }
 
     /**
@@ -58,7 +58,7 @@ export default class UserController {
      */
     public static update(req: Request, res: Response): void {
         const data = req.body;
-        User.findById(req.params.id).then((user) => {
+        User.findById(req.params.id).then(user => {
             if (user == null) {
                 return res.status(200).send({
                     message: `User ${req.params.id} was not found !`,
@@ -84,7 +84,7 @@ export default class UserController {
      * @return void
      */
     public static delete(req: Request, res: Response): void {
-        User.findById(req.params.id).then((user) => {
+        User.findById(req.params.id).then(user => {
             if (user == null) {
                 return res.status(200).send({
                     message: `User ${req.params.id} was not found !`,
