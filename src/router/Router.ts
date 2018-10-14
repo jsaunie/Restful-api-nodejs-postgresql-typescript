@@ -1,10 +1,10 @@
 import {Application} from "express";
-import UserRoute from "./UserRouter";
+import UserRouter from "./UserRouter";
 
 export class Router {
 
     constructor(app: Application) {
-        app.use(UserRoute.prefix, UserRoute.router);
+        app.use(UserRouter.prefix, UserRouter.router);
     }
 
 }

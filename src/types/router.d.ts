@@ -6,13 +6,13 @@ export type ISubMiddleware = {
     path: PathParams;
 };
 
-export interface IRoute<T> {
+export interface IRouter<T> {
     readonly router: Router;
     readonly prefix: string;
-    middleware?: RequestHandler[];
-    subMiddleware?: ISubMiddleware[];
+    readonly middleware: RequestHandler[];
+    readonly subMiddleware: ISubMiddleware[];
 
-    routes(): T;
     setSubStackMiddleware(middlewareSubStack: ISubMiddleware[]): T;
     setGlobalMiddleware(middlewareStack: RequestHandler[]): T;
+    routes(): void;
 }

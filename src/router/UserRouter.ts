@@ -1,52 +1,49 @@
 import {RequestHandler, Router} from 'express';
-import UserMiddleware from '../http/middleware/UserMiddleware';
+import AuthMiddleware from '../http/middleware/AuthMiddleware';
 import UserController from '../http/controller/UserController';
-import {IRoute, ISubMiddleware} from "../types/router";
+import {IRouter, ISubMiddleware} from "../types/router";
 
-class UserRoute implements IRoute<UserRoute> {
+class UserRouter implements IRouter<UserRouter> {
 
     public readonly router: Router;
 
     public readonly prefix: string = '/user';
 
-    private static middleware: RequestHandler[] = [
-        UserMiddleware.isAuthenticated,
-        UserMiddleware.isAllowed,
+    readonly middleware: RequestHandler[] = [
+        AuthMiddleware.isAuthenticated,
+        AuthMiddleware.isAllowed,
     ];
 
-    private static subMiddleware = [
-        {path: '/:id', middleware: UserMiddleware.isAllowed},
+    readonly subMiddleware = [
+        {path: '/:id', middleware: AuthMiddleware.isAllowed},
     ];
 
     /**
      * Define all path of your router
-     * @return UserRoute
+     * @return UserRouter
      */
-    public routes(): UserRoute {
+    public routes() {
         this.router.get('/', UserController.index);
         this.router.post('/', UserController.add);
         this.router.get('/:id', UserController.show);
-        this.router.put('/:id', UserMiddleware.isAllowed, UserController.update);
+        this.router.put('/:id', AuthMiddleware.isAllowed, UserController.update);
         this.router.delete('/:id', UserController.delete);
-
-        return this;
     }
 
     constructor() {
         this.router = Router();
-        this.setGlobalMiddleware(UserRoute.middleware)
-            .setSubStackMiddleware(UserRoute.subMiddleware)
-            .routes();
+        this.setGlobalMiddleware()
+            .setSubStackMiddleware();
+        this.routes();
     }
 
     /**
      * Set a middleware sub-stack shows request info
      * for any type of HTTP request to the path
-     * @param {ISubMiddleware[]} middlewareSubStack
-     * @return UserRoute
+     * @return UserRouter
      */
-    public setSubStackMiddleware(middlewareSubStack: ISubMiddleware[]): UserRoute {
-        middlewareSubStack.forEach((subStack: ISubMiddleware) => {
+    public setSubStackMiddleware(): UserRouter {
+        this.subMiddleware.forEach((subStack: ISubMiddleware) => {
             this.router.use(subStack.path, subStack.middleware);
         });
 
@@ -56,11 +53,10 @@ class UserRoute implements IRoute<UserRoute> {
     /**
      * Set a middleware function with no mount path.
      * This code is executed for every request to the router
-     * @param {RequestHandler[]} middlewareStack
-     * @return UserRoute
+     * @return UserRouter
      */
-    public setGlobalMiddleware(middlewareStack: RequestHandler[]): UserRoute {
-        middlewareStack.forEach((middleware: RequestHandler) => {
+    public setGlobalMiddleware(): UserRouter {
+        this.middleware.forEach((middleware: RequestHandler) => {
             this.router.use(middleware);
         });
         return this;
@@ -68,4 +64,4 @@ class UserRoute implements IRoute<UserRoute> {
 
 }
 
-export default new UserRoute();
+export default new UserRouter();

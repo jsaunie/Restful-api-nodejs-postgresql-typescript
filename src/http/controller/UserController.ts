@@ -1,4 +1,5 @@
 import {Request, Response} from 'express';
+import {UserInstance} from "../../types/models/User";
 import User from "../../database/models/User";
 
 export default class UserController {
@@ -11,7 +12,7 @@ export default class UserController {
      * @return void
      */
     public static index(req: Request, res: Response): void {
-        User.findAll().then(users => {
+        User.findAll().then((users: UserInstance[]) => {
             res.status(200).send({
                 message: `All user`,
                 users,
@@ -27,7 +28,7 @@ export default class UserController {
      * @return void
      */
     public static show(req: Request, res: Response): void {
-        User.findById(req.params.id).then(user => res.status(200).send(user));
+        User.findById(req.params.id).then((user: UserInstance | null) => res.status(200).send(user));
     }
 
     /**
@@ -58,14 +59,14 @@ export default class UserController {
      */
     public static update(req: Request, res: Response): void {
         const data = req.body;
-        User.findById(req.params.id).then(user => {
+        User.findById(req.params.id).then((user: UserInstance | null) => {
             if (user == null) {
                 return res.status(200).send({
                     message: `User ${req.params.id} was not found !`,
                     data
                 });
             }
-            return user.update(data).then(() => {
+            user.update(data).then(() => {
                 res.status(200).send({
                     message: `User ${req.params.id} was successfully updated !`,
                     user,
@@ -84,13 +85,13 @@ export default class UserController {
      * @return void
      */
     public static delete(req: Request, res: Response): void {
-        User.findById(req.params.id).then(user => {
+        User.findById(req.params.id).then((user: UserInstance | null) => {
             if (user == null) {
                 return res.status(200).send({
                     message: `User ${req.params.id} was not found !`,
                 });
             }
-            return user.destroy().then(() => {
+            user.destroy().then(() => {
                 res.status(200).send({
                     message: `User ${req.params.id} was successfully deleted !`
                 })
