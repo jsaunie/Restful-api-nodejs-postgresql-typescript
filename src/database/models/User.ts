@@ -1,13 +1,15 @@
-import {DefineAttributes, STRING} from 'sequelize';
-import Database from '../Database';
+import Sequelize, {DefineModelAttributes, DefineOptions, STRING} from 'sequelize';
+import {UserAttributes, UserInstance} from '../../types/models/User';
+import {IModel} from "../../types/models/Model";
+import Database from "../Database";
 
-class UserModel {
+class UserModel implements IModel<UserInstance, UserAttributes> {
 
-    public model;
+    public readonly model: Sequelize.Model<UserInstance, UserAttributes>;
 
-    private static modelName: string = 'user';
+    readonly modelName: string = 'user';
 
-    private static attributes: DefineAttributes = {
+    readonly attributes: DefineModelAttributes<UserAttributes> = {
         firstName: {
             type: STRING
         },
@@ -16,30 +18,10 @@ class UserModel {
         }
     };
 
-    private static options = {};
+    readonly options: DefineOptions<UserInstance> = {};
 
     constructor() {
-        this.model = Database.define(
-            UserModel.modelName,
-            UserModel.attributes,
-            UserModel.options,
-        );
-
-        this.createTable();
-    }
-
-    /**
-     * Create table
-     */
-    private createTable(): void {
-        this.model.sync({force: true}).then(() => {
-            console.log('recreate');
-            // Table created
-            return this.model.create({
-                firstName: 'John',
-                lastName: 'Doe'
-            });
-        });
+        this.model = Database.define(this.modelName, this.attributes, this.options);
     }
 
 }

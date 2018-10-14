@@ -1,8 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-export default class UserMiddleware {
-
-    constructor() {}
+export default class AuthMiddleware {
 
     /**
      * If user is authenticated, he can go to the next route
