@@ -56,7 +56,7 @@ const database: ISequelizeDatabase = {
         },
 
         // similar for sync: you can define this to always force sync for models
-        sync: {force: true},
+        // sync: {force: true},
 
         // pool configuration used to pool database connections
         pool: {
