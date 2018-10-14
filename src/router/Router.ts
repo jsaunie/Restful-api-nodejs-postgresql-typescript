@@ -1,5 +1,5 @@
 import {Application} from "express";
-import UserRoute from "./userRouter";
+import UserRoute from "./UserRouter";
 
 export class Router {
 
